@@ -694,7 +694,7 @@ void enviarFluxo()
     String fluxo_formatado_B = "B" + String(fluxo_B) + "-" + String(unidade_B) + "-" + seringa_B;             
     
     // junta em uma unica mensage
-    String fluxo_enviado = fluxo_formatado_A + "|" + fluxo_formatado_B;
+    String fluxo_enviado = fluxo_formatado_A + "|" + fluxo_formatado_B + "\n";
 
     // envia a mensagem
     Serial.print(fluxo_enviado);
