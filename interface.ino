@@ -159,11 +159,6 @@ void menuBombaSelecionada()
 {
     lerTeclado(0x00, 0x01, 0x01, 0x00, 0x01);              // Le qual botao foi apertado
 
-    ///////// DEBUG **********************************************
-    Serial.print(pos_seta_selecao);
-    Serial.println(pos_seta_selecao_anterior);
-    ///////// DEBUG **********************************************
-
     // --- Avalia em qual posicao a seta de selecao deve ser exibida ---
     if (pos_seta_selecao == 1 && (pos_seta_selecao_anterior == 1 || pos_seta_selecao_anterior == 2))
     {
@@ -388,7 +383,7 @@ Selecionar os parametros ajustaveis
 
 void menuSelecionarAjuste()
 {
-    lerTeclado(0x00, 0x01, 0x01, 0x00, 0x01);           // Le qual botao foi apertado
+    lerTeclado(0x00, 0x01, 0x01, 0x00, 0x01);           // le qual botao foi apertado
 
     // obtem o tamanho da seringa atual
     if      (bomba_selecionada == 'A') seringa_atual = seringa_A;
@@ -439,12 +434,7 @@ Selecionar unidade
 
 void menuSelecionarUnidade()
 {
-    lerTeclado(0x00, 0x01, 0x01, 0x00, 0x01);           // Le qual botao foi apertado
-
-    ///////// DEBUG **********************************************
-    Serial.print(pos_seta_selecao);
-    Serial.println(pos_seta_selecao_anterior);
-    ///////// DEBUG **********************************************
+    lerTeclado(0x00, 0x01, 0x01, 0x00, 0x01);           // le qual botao foi apertado
 
     // --- Avalia em qual posicao a seta de selecao deve ser exibida ---
     if (pos_seta_selecao == 1 && (pos_seta_selecao_anterior == 1 || pos_seta_selecao_anterior == 2))
@@ -513,9 +503,9 @@ Selecionar tamanho da seringa
 
 void menuSelecionarSeringa()
 {
-    lerTeclado(0x00, 0x01, 0x01, 0x00, 0x01);                   // Le qual botao foi apertado
+    lerTeclado(0x00, 0x01, 0x01, 0x00, 0x01);                   // le qual botao foi apertado
 
-    // --- Avalia em qual algarismo esta sendo selecionado no fluxo ---
+    // --- avalia em qual algarismo esta sendo selecionado no fluxo ---
     if (posicao_algarismo == 0) 
     {
         lcd.setCursor(0,0); lcd.print(" " + String(algarismo) + "   mL         ");
@@ -538,21 +528,21 @@ void menuSelecionarSeringa()
     }
   
     // --- Acoes para cada botao --- 
-    if(up == 0x01)                                         //tecla up pressionada?
-    {                                                      //sim...
-        up = 0x00;                                         //limpa flag da tecla
-        atualizarAlgarismoUp(9);                           // Atualiza o algarismo
+    if(up == 0x01)                                         // tecla up pressionada?
+    {                                                      // sim...
+        up = 0x00;                                         // limpa flag da tecla
+        atualizarAlgarismoUp(9);                           // atualiza o algarismo
     } //end if up
     
-    if(down == 0x01)                                       //tecla down pressionada?
-    {                                                      //sim...
-        down = 0x00;                                       //limpa flag da tecla
+    if(down == 0x01)                                       // tecla down pressionada?
+    {                                                      // sim...
+        down = 0x00;                                       // limpa flag da tecla
         atualizarAlgarismoDown(9);                         // Atualiza o algarismo
     } //end if down
     
-    if(select == 0x01)                                      //tecla select pressionada?
-    {                                                       //sim...
-        select = 0x00;                                      //limpa flag da tecla
+    if(select == 0x01)                                      // tecla select pressionada?
+    {                                                       // sim...
+        select = 0x00;                                      // limpa flag da tecla
 
         if (posicao_algarismo == 0) {
             seringa_selecionada += String(algarismo);
@@ -598,10 +588,10 @@ void lerTeclado(boolean usa_right, boolean usa_up, boolean usa_down, boolean usa
     As que estao como 0x00 nao exercem funcao no menu que foram chamadas, logo sua flag deve ser limpa
     */
 
-    //Variável para leitura recebe valor AD de A0
+    // Variavel para leitura recebe valor AD de A0
     adc_value = analogRead(A0);
 
-    // --- Testa se os botões foram pressionados ---
+    // --- Testa se os botoes foram pressionados ---
     // Se foi pressionado, seta a respectiva flag
     if      (adc_value < 60 && usa_right)                       right_flag  =  0x01;
     else if (adc_value > 60  && adc_value < 200 && usa_up)      up_flag     =  0x01;
@@ -615,31 +605,31 @@ void lerTeclado(boolean usa_right, boolean usa_up, boolean usa_down, boolean usa
     {                                             // sim...
         right_flag = 0x00;                        // limpa flag right_flag
         right      = 0x01;                        // seta flag right 
-    }
+    } // end right
 
     if (adc_value > 200 && up_flag)               // botao up solto e flag up_flag setada?
     {                                             // sim...
         up_flag = 0x00;                           // limpa flag up_flag
         up      = 0x01;                           // seta flag up 
-    }
+    } // end up
 
     if (adc_value > 400 && down_flag)             // botao down solto e flag down_flag setada?
     {                                             // sim...
         down_flag = 0x00;                         // limpa flag down_flag
         down      = 0x01;                         // seta flag down  
-    }
+    } // end down
 
     if (adc_value > 600 && left_flag)             // botao left solto e flag left_flag setada?
     {                                             // sim...
         left_flag = 0x00;                         // limpa flag left_flag
         left      = 0x01;                         // seta flag left 
-    }
+    } // end left
 
     if (adc_value > 800 && select_flag)           //Botão left solto e flag left_flag setada?
     {                                             //Sim...
         select_flag = 0x00;                       //Limpa flag left_flag
         select   = 0x01;                          //Seta flag left   
-    }  
+    } // end select 
 }
 
 /*
@@ -693,7 +683,7 @@ void enviarFluxo()
     String fluxo_formatado_A = "A" + String(fluxo_A) + "-" + String(unidade_A) + "-" + seringa_A;
     String fluxo_formatado_B = "B" + String(fluxo_B) + "-" + String(unidade_B) + "-" + seringa_B;             
     
-    // junta em uma unica mensage
+    // junta em uma unica menssagem
     String fluxo_enviado = fluxo_formatado_A + "|" + fluxo_formatado_B + "\n";
 
     // envia a mensagem
