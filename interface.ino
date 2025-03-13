@@ -4,7 +4,7 @@
     REFERENCIA 2: Canal WR Kits (https://www.youtube.com/canalwrkits)
 */
 
-// --- Bibliotecas Auxiliares ---
+// --- Bibliotecas Auxiliares ---k
 #include <LiquidCrystal.h>
 
 
@@ -31,6 +31,7 @@ boolean right  = 0x00,   right_flag  = 0x00,
 
 int pos_seta_selecao = 1;                       // armazena em qual posicao do menu o cursor esta
 int pos_seta_selecao_anterior = 1;              // armazena em qual posicao do menu o cursor esta
+int pos_seta_selecao_ante_anterior = 1;              // armazena em qual posicao do menu o cursor esta
 int menu = 1;                                   // armazena qual menu deve ser exibido  
 
 char bomba_selecionada;                         // armazena qual bomba sera acionada                     
@@ -48,7 +49,7 @@ String seringa_B = "000";                       // armazena o tamanho da seringa
 
 int unidade;                                    // armazena a unidade da bomba selecionada
 int unidade_A = 1;                              // armazena a unidade das bombas
-int unidade_B = 1;                              // unidade = 1: mL/min | unidade = 2: passos/s                    
+int unidade_B = 1;                              // unidade = 1: mL/min | unidade = 2: passos/s | unidade = 3: rpm                  
 
 
 // --- Prototipo das funcoes auxiliares ---
@@ -158,49 +159,74 @@ void menuBombaSelecionada()
 {
     lerTeclado(0x00, 0x01, 0x01, 0x00, 0x01);              // Le qual botao foi apertado
 
+    ///////// DEBUG **********************************************
+    Serial.print(pos_seta_selecao);
+    Serial.println(pos_seta_selecao_anterior);
+    ///////// DEBUG **********************************************
+
     // --- Avalia em qual posicao a seta de selecao deve ser exibida ---
     if (pos_seta_selecao == 1 && (pos_seta_selecao_anterior == 1 || pos_seta_selecao_anterior == 2))
     {
         lcd.setCursor(0,0); lcd.print(" > Iniciar    " + String(bomba_selecionada) + " ");
-        lcd.setCursor(0,1); lcd.print("   Ajustes      ");
+        lcd.setCursor(0,1); lcd.print("   Parar        ");
     } else 
     if (pos_seta_selecao == 2 && pos_seta_selecao_anterior == 1)
     {
         lcd.setCursor(0,0); lcd.print("   Iniciar    " + String(bomba_selecionada) + " ");
-        lcd.setCursor(0,1); lcd.print(" > Ajustes      ");
+        lcd.setCursor(0,1); lcd.print(" > Parar        ");
     } else 
     if (pos_seta_selecao == 2 && pos_seta_selecao_anterior == 3)
     {
-        lcd.setCursor(0,0); lcd.print(" > Ajustes    " + String(bomba_selecionada) + " ");
-        lcd.setCursor(0,1); lcd.print("   Voltar       ");
+        lcd.setCursor(0,0); lcd.print(" > Parar      " + String(bomba_selecionada) + " ");
+        lcd.setCursor(0,1); lcd.print("   Reiniciar    ");
     } else 
     if (pos_seta_selecao == 3 && pos_seta_selecao_anterior == 2)
     {
+        lcd.setCursor(0,0); lcd.print("   Parar      "  + String(bomba_selecionada) + " ");
+        lcd.setCursor(0,1); lcd.print(" > Reiniciar    ");
+    } else 
+    if (pos_seta_selecao == 3 && pos_seta_selecao_anterior == 4)
+    {
+        lcd.setCursor(0,0); lcd.print(" > Reiniciar  "  + String(bomba_selecionada) + " ");
+        lcd.setCursor(0,1); lcd.print("   Ajustes      ");
+    } else 
+    if (pos_seta_selecao == 4 && pos_seta_selecao_anterior == 3)
+    {
+        lcd.setCursor(0,0); lcd.print("   Reiniciar  "  + String(bomba_selecionada) + " ");
+        lcd.setCursor(0,1); lcd.print(" > Ajustes      ");
+    } else
+    if (pos_seta_selecao == 4 && pos_seta_selecao_anterior == 5)
+    {
+        lcd.setCursor(0,0); lcd.print(" > Ajustes      "  + String(bomba_selecionada) + " ");
+        lcd.setCursor(0,1); lcd.print("   Voltar       ");
+    }else
+    if (pos_seta_selecao == 5 && pos_seta_selecao_anterior == 4)
+    {
         lcd.setCursor(0,0); lcd.print("   Ajustes    "  + String(bomba_selecionada) + " ");
         lcd.setCursor(0,1); lcd.print(" > Voltar       ");
-    } else 
-    if (pos_seta_selecao == 3 && pos_seta_selecao_anterior == 1)
-    {
-        lcd.setCursor(0,0); lcd.print(" > Voltar     "  + String(bomba_selecionada) + " ");
-        lcd.setCursor(0,1); lcd.print("   Iniciar      ");
-    } else 
-    if (pos_seta_selecao == 1 && pos_seta_selecao_anterior == 3)
+    } else
+    if (pos_seta_selecao == 1 && pos_seta_selecao_anterior == 5)
     {
         lcd.setCursor(0,0); lcd.print("   Voltar     "  + String(bomba_selecionada) + " ");
         lcd.setCursor(0,1); lcd.print(" > Iniciar      ");
+    } else
+    if (pos_seta_selecao == 5 && pos_seta_selecao_anterior == 1)
+    {
+        lcd.setCursor(0,0); lcd.print(" > Voltar     "  + String(bomba_selecionada) + " ");
+        lcd.setCursor(0,1); lcd.print("   Iniciar      ");
     }
 
     // --- Acoes para cada botao --- 
     if(up == 0x01)                                         // tecla up pressionada?
     {                                                      // sim...
         up = 0x00;                                         // limpa flag da tecla
-        atualizarPosicaoSetaUp(3);                         // a posicao da seta de selecao     
+        atualizarPosicaoSetaUp(5);                         // a posicao da seta de selecao     
     } //end if up
     
     if(down == 0x01)                                       // tecla down pressionada?
     {                                                      // sim...
         down = 0x00;                                       // limpa flag da tecla
-        atualizarPosicaoSetaDown(3);                       // a posicao da seta de selecao
+        atualizarPosicaoSetaDown(5);                       // a posicao da seta de selecao
     
     } //end if down
     
@@ -209,12 +235,42 @@ void menuBombaSelecionada()
         select = 0x00;                                     // limpa flag da tecla
         
         // atualiza a variavel que muda o menu no proximo loop
-        if      (pos_seta_selecao == 1) menu = 3;
-        else if (pos_seta_selecao == 2) menu = 4;
-        else if (pos_seta_selecao == 3) menu = 1;
+        if      (pos_seta_selecao == 1) menu = 3; // iniciar
+        else if (pos_seta_selecao == 2) menu = 4; // ajustes
+        else if (pos_seta_selecao == 3) menu = 1; // voltar
+
+        // atualiza a variavel que muda o menu no proximo loop
+        if      (pos_seta_selecao == 1) menu = 3; // iniciar
+        else if (pos_seta_selecao == 2)           // parar
+        {       
+            // Atualiza o fluxo da bomba selecionada
+            if      (bomba_selecionada == 'A') fluxo_A = "0000";
+            else if (bomba_selecionada == 'B') fluxo_B = "0000"; 
+
+            enviarFluxo();                                  // envia o fluxo para o arduino que controla as bombas
+
+            fluxo_selecionado = "";                         // reinicia o fluxo selecionado para 0
+            menu = 2;                                       // atualiza a variavel que muda o menu no proximo loop
+        }
+        else if (pos_seta_selecao == 3)           // reiniciar
+        {       
+            // Atualiza o fluxo da bomba selecionada com o codigo de reset
+            if      (bomba_selecionada == 'A') fluxo_A = "XXXX";
+            else if (bomba_selecionada == 'B') fluxo_B = "XXXX"; 
+
+            enviarFluxo();                                  // envia o fluxo para o arduino que controla as bombas
+
+            fluxo_selecionado = "";                         // reinicia o fluxo selecionado para 0
+            menu = 2;                                       // atualiza a variavel que muda o menu no proximo loop
+        }
+        else if (pos_seta_selecao == 4) menu = 4; // ajustes
+        else if (pos_seta_selecao == 5) menu = 1; // voltar
         
-        pos_seta_selecao = 1;                              // reinicia a seta de selecao na primeira posicao
-        pos_seta_selecao_anterior = 1;                     // reinicia a posicao anterior para a posicao inicial
+        if (!(pos_seta_selecao == 2 || pos_seta_selecao == 3)) // se a opcao selecionada for parar ou reiniciar, mantem a seta de selecao na posicao
+        {
+            pos_seta_selecao = 1;                              // reinicia a seta de selecao na primeira posicao
+            pos_seta_selecao_anterior = 1;                     // reinicia a posicao anterior para a posicao inicial
+        }
     } //end if left
 }
 
@@ -314,7 +370,7 @@ void menuSelecionarFluxo()
 
             enviarFluxo();                                  // envia o fluxo para o arduino que controla as bombas
 
-            fluxo_selecionado = "";                     // reinicia o fluxo selecionado para 0
+            fluxo_selecionado = "";                         // reinicia o fluxo selecionado para 0
             algarismo = 0;                                  // reinicia o algarismo para 0
             posicao_algarismo = 0;                          // reinicia a posicao do algarismo para 0
             pos_seta_selecao = 1;                           // reinicia a seta de selecao na primeira posicao
@@ -344,7 +400,7 @@ void menuSelecionarAjuste()
         lcd.setCursor(0,0); lcd.print(" > Unidade      ");
         lcd.setCursor(0,1); lcd.print("   Seringa  " + seringa_atual + " ");
     } else 
-    if (pos_seta_selecao == 2)
+    if (pos_seta_selecao == 2 && pos_seta_selecao_anterior == 1)
     {
         lcd.setCursor(0,0); lcd.print("   Unidade      ");
         lcd.setCursor(0,1); lcd.print(" > Seringa  " + seringa_atual + " ");
@@ -385,29 +441,54 @@ void menuSelecionarUnidade()
 {
     lerTeclado(0x00, 0x01, 0x01, 0x00, 0x01);           // Le qual botao foi apertado
 
+    ///////// DEBUG **********************************************
+    Serial.print(pos_seta_selecao);
+    Serial.println(pos_seta_selecao_anterior);
+    ///////// DEBUG **********************************************
+
     // --- Avalia em qual posicao a seta de selecao deve ser exibida ---
-    if (pos_seta_selecao == 1)
+    if (pos_seta_selecao == 1 && (pos_seta_selecao_anterior == 1 || pos_seta_selecao_anterior == 2))
     {
         lcd.setCursor(0,0); lcd.print(" > mL/min       ");
         lcd.setCursor(0,1); lcd.print("   passos/s     ");
     } else 
-    if (pos_seta_selecao == 2)
+    if (pos_seta_selecao == 2 && pos_seta_selecao_anterior == 1)
     {
         lcd.setCursor(0,0); lcd.print("   mL/min       ");
         lcd.setCursor(0,1); lcd.print(" > passos/s     ");
+    } else 
+    if (pos_seta_selecao == 2 && pos_seta_selecao_anterior == 3) ///editar
+    {
+        lcd.setCursor(0,0); lcd.print(" > passos/s     ");
+        lcd.setCursor(0,1); lcd.print("   rpm          ");
+    } else 
+    if (pos_seta_selecao == 3 && pos_seta_selecao_anterior == 2)
+    {
+        lcd.setCursor(0,0); lcd.print("   passos/s     ");
+        lcd.setCursor(0,1); lcd.print(" > rpm          ");
+    } else 
+    if (pos_seta_selecao == 3 && pos_seta_selecao_anterior == 1)  // editar
+    {
+        lcd.setCursor(0,0); lcd.print(" > rpm          ");
+        lcd.setCursor(0,1); lcd.print("   mL/min       ");
+    } else 
+    if (pos_seta_selecao == 1 && pos_seta_selecao_anterior == 3)
+    {
+        lcd.setCursor(0,0); lcd.print("   rpm          ");
+        lcd.setCursor(0,1); lcd.print(" > mL/min       ");
     }
 
     // --- Acoes para cada botao ---
     if(up == 0x01)                                         // tecla up pressionada?
     {                                                      // sim...
         up = 0x00;                                         // limpa flag da tecla
-        atualizarPosicaoSetaUp(2);                         // Atualiza a posicao da seta de selecao
+        atualizarPosicaoSetaUp(3);                         // Atualiza a posicao da seta de selecao
     } //end if up
     
     if(down == 0x01)                                       // tecla down pressionada?
     {                                                      // sim...
         down = 0x00;                                       // limpa flag da tecla
-        atualizarPosicaoSetaDown(2);                       // Atualiza a posicao da seta de selecao 
+        atualizarPosicaoSetaDown(3);                       // Atualiza a posicao da seta de selecao 
     } //end if down
     
     if(select == 0x01)                                     // tecla select pressionada?
@@ -494,7 +575,7 @@ void menuSelecionarSeringa()
             if      (bomba_selecionada == 'A') seringa_A = seringa_selecionada;
             else if (bomba_selecionada == 'B') seringa_B = seringa_selecionada; 
 
-            seringa_selecionada = "";                    // reinicia a seringa selecioanada para 0
+            seringa_selecionada = "";                       // reinicia a seringa selecioanada para 0
             algarismo = 0;                                  // reinicia o algarismo para 0
             posicao_algarismo = 0;                          // reinicia a posicao do algarismo para 0
             pos_seta_selecao = 1;                           // reinicia a seta de selecao na primeira posicao
@@ -610,7 +691,7 @@ void enviarFluxo()
 {
     // formata o fluxo A no formado que deve ser enviado
     String fluxo_formatado_A = "A" + String(fluxo_A) + "-" + String(unidade_A) + "-" + seringa_A;
-    String fluxo_formatado_B = "B" + String(fluxo_B) + "-" + String(unidade_B) + "-" + seringa_B;                 
+    String fluxo_formatado_B = "B" + String(fluxo_B) + "-" + String(unidade_B) + "-" + seringa_B;             
     
     // junta em uma unica mensage
     String fluxo_enviado = fluxo_formatado_A + "|" + fluxo_formatado_B;
