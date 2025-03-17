@@ -306,7 +306,6 @@ void menuSelecionarFluxo() // menu 3
     // --- Avalia em qual algarismo esta sendo selecionado no fluxo ---
     if (posicao_algarismo == 0) 
     {
-        Serial.println(fluxo_selecionado);
         if      (unidade == 1) {lcd.setCursor(0,0); lcd.print(" " + String(algarismo) + "       mL/min ");}
         else if (unidade == 2) {lcd.setCursor(0,0); lcd.print(" " + String(algarismo) + "     passos/s ");}
         else if (unidade == 3) {lcd.setCursor(0,0); lcd.print(" " + String(algarismo) + "          rpm ");}
@@ -315,7 +314,6 @@ void menuSelecionarFluxo() // menu 3
     } else 
     if (posicao_algarismo == 1) 
     {
-        Serial.println(fluxo_selecionado);
         if      (unidade == 1) {lcd.setCursor(0,0); lcd.print(" " + fluxo_selecionado + String(algarismo) + "      mL/min ");}
         else if (unidade == 2) {lcd.setCursor(0,0); lcd.print(" " + fluxo_selecionado + String(algarismo) + "    passos/s ");}
         else if (unidade == 3) {lcd.setCursor(0,0); lcd.print(" " + fluxo_selecionado + String(algarismo) + "         rpm ");}
@@ -324,7 +322,6 @@ void menuSelecionarFluxo() // menu 3
     } else 
     if (posicao_algarismo == 2) 
     {
-        Serial.println(fluxo_selecionado);
         if      (unidade == 1) {lcd.setCursor(0,0); lcd.print(" " + fluxo_selecionado + String(algarismo) + "     mL/min ");}
         else if (unidade == 2) {lcd.setCursor(0,0); lcd.print(" " + fluxo_selecionado + String(algarismo) + "   passos/s ");}
         else if (unidade == 3) {lcd.setCursor(0,0); lcd.print(" " + fluxo_selecionado + String(algarismo) + "        rpm ");}
@@ -333,7 +330,6 @@ void menuSelecionarFluxo() // menu 3
     } else 
     if (posicao_algarismo == 3) 
     {
-        Serial.println(fluxo_selecionado);
         if      (unidade == 1) {lcd.setCursor(0,0); lcd.print(" " + fluxo_selecionado + String(algarismo) + "    mL/min ");}
         else if (unidade == 2) {lcd.setCursor(0,0); lcd.print(" " + fluxo_selecionado + String(algarismo) + "  passos/s ");}
         else if (unidade == 3) {lcd.setCursor(0,0); lcd.print(" " + fluxo_selecionado + String(algarismo) + "       rpm ");}
@@ -342,7 +338,6 @@ void menuSelecionarFluxo() // menu 3
     } else 
     if (posicao_algarismo == 4) 
     {
-        Serial.println(fluxo_selecionado);
         if      (unidade == 1) {lcd.setCursor(0,0); lcd.print(" " + fluxo_selecionado + "    mL/min ");}
         else if (unidade == 2) {lcd.setCursor(0,0); lcd.print(" " + fluxo_selecionado + "  passos/s ");}
         else if (unidade == 3) {lcd.setCursor(0,0); lcd.print(" " + fluxo_selecionado + "       rpm ");}
