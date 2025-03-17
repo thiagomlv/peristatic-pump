@@ -950,20 +950,28 @@ Enviar o fluxo para o arduino que controla os motores
 // --- Deve ser chamada toda vez que um dos fluxos for atualizado ---
 void enviarFluxo()
 {
-    // formata o fluxo A no formado que deve ser enviado
-    float pps_enviado_A;
-    if      (unidade_A == 1) pps_enviado_A = converterMLParaPassos('A', fluxo_A.toInt());
-    else if (unidade_A == 2) pps_enviado_A = fluxo_A.toInt();
-    else if (unidade_A == 3) pps_enviado_A = converterRPMParaPassos(fluxo_A.toInt());
+    if (fluxo_A != "XXXX")
+    {
+        // formata o fluxo A no formado que deve ser enviado
+        float pps_enviado_A;
+        if      (unidade_A == 1) pps_enviado_A = converterMLParaPassos('A', fluxo_A.toInt());
+        else if (unidade_A == 2) pps_enviado_A = fluxo_A.toInt() * 1.00;
+        else if (unidade_A == 3) pps_enviado_A = converterRPMParaPassos(fluxo_A.toInt());
+        fluxo_A = String(pps_enviado_A); 
+    }
 
-    float pps_enviado_B;
-    if      (unidade_B == 1) pps_enviado_B = converterMLParaPassos('B', fluxo_B.toInt());
-    else if (unidade_B == 2) pps_enviado_B = fluxo_B.toFloat();
-    else if (unidade_B == 3) pps_enviado_B = converterRPMParaPassos(fluxo_B.toInt());          
+    if (fluxo_B != "XXXX")
+    {
+        float pps_enviado_B;
+        if      (unidade_B == 1) pps_enviado_B = converterMLParaPassos('B', fluxo_B.toInt());
+        else if (unidade_B == 2) pps_enviado_B = fluxo_B.toInt() * 1.00;
+        else if (unidade_B == 3) pps_enviado_B = converterRPMParaPassos(fluxo_B.toInt());
+        fluxo_B = String(pps_enviado_B);          
+    }
     
     // junta em uma unica mensagem
-    String fluxo_enviado = String(pps_enviado_A * 1.00) + "|" + String(pps_enviado_B * 1.00);
+    String fluxo_enviado = fluxo_A + "|" + fluxo_B + "\n";
 
     // envia a mensagem
-    Serial.println(fluxo_enviado);
+    Serial.print(fluxo_enviado);
 }

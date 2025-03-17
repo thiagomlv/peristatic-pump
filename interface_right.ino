@@ -963,8 +963,8 @@ void enviarFluxo()
     else if (unidade_B == 3) pps_enviado_B = converterRPMParaPassos(fluxo_B.toInt());          
     
     // junta em uma unica mensagem
-    String fluxo_enviado = String(pps_enviado_A * 1.00) + "|" + String(pps_enviado_B * 1.00);
+    String fluxo_enviado = String(pps_enviado_A * 1.00) + "|" + String(pps_enviado_B * 1.00) + "\n";
 
     // envia a mensagem
-    Serial.println(fluxo_enviado);
+    Serial.print(fluxo_enviado);
 }

@@ -100,11 +100,6 @@ void loop()
         mensagem = Serial1.readStringUntil('\n');       // le a mensagem ate o caractere de nova linha
         mensagem.trim();                                // remove espaços em branco e caracteres de nova linha
 
-        Serial.println(mensagem);
-        //Serial1.println(mensagem);
-
-
-
         // verifica se a mensagem contem os delimitadores esperados
         if (mensagem.indexOf('|') != -1) 
         {
@@ -119,10 +114,10 @@ void loop()
 
 
             // processa a parte A
-            if (mensagem_A.length() == TAMANHO_MENSAGEM_POR_BOMBA) processarParametros(mensagem_A, 'A');
+            processarParametros(mensagem_A, 'A');
 
             // processa a parte B
-            if (mensagem_B.length() == TAMANHO_MENSAGEM_POR_BOMBA) processarParametros(mensagem_B, 'B');
+            processarParametros(mensagem_B, 'B');
         }
     }
 

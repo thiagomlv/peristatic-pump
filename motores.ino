@@ -63,6 +63,7 @@ void setup()
     pinMode(B_STEP_PIN, OUTPUT);                // define o pino de passos do motor A como OUTUP 
         
     Serial1.begin(9600);                         // inicializa a interface de comunicacao serial1 1
+    Serial.begin(9600);
 
     bomba_A.setMaxSpeed(1000);                  // Velocidade máxima (passos/segundo)
     bomba_A.setAcceleration(500);               // Aceleração (passos/segundo²)
@@ -93,10 +94,10 @@ void loop()
             mensagem_B = mensagem.substring(indice_separador);
 
             // processa a parte A
-            if (mensagem_A.length() == TAMANHO_MENSAGEM_POR_BOMBA) processarParametros(mensagem_A, "A");
+            processarParametros(mensagem_A, 'A');
 
             // processa a parte B
-            if (mensagem_B.length() == TAMANHO_MENSAGEM_POR_BOMBA) processarParametros(mensagem_B, "B");;
+            processarParametros(mensagem_B, 'B');
         }
     }
 
@@ -150,7 +151,7 @@ void processarParametros(String mensagem, char bomba)
     {
         if (mensagem != "XXXX")                                // o fluxo eh o codigo de reiniciar "XXXX"?
         {                                                      // nao...
-            fluxo_float = mensagem.toInt();                    // converte o fluxo para inteiro
+            fluxo_float = mensagem.substring(1).toFloat();     // converte o fluxo para inteiro
             if (fluxo_B != fluxo_float)                        // verifica se o fluxo recebido eh igual ao que ja estava
             {                                                  // nao...
                 fluxo_B = fluxo_float;                         // atualiza o fluxo da bomba com o novo fluxo (localmente)
@@ -219,12 +220,12 @@ void voltar_posicao_inicial(char bomba)
 {
     if (bomba == 'A')
     {
-
-        bomba_A.setMaxSpeed(200);         // define a velocidade maxima para 200 passos/segundo
-        bomba_A.setAcceleration(0);       // atinge 200pps instantaneamente
-        bomba_A.stop();                   // para o motor
-        bomba_A.moveTo(0);                // define o alvo de posição como 0
-        bomba_A.run();                    // atualiza o motor para alcançar a posicao 0
+        bomba_A_acionada = 0x00;
+        bomba_A.setMaxSpeed(200);
+        bomba_A.setAcceleration(0);
+        bomba_A.stop();        // para o motor
+        bomba_A.moveTo(0);     // move para a posicao 0
+        bomba_A.run();         // atualiza o motor para alcançar a posicao 0
 
         // aguarda ate que o motor alcance a posicao 0
         while (bomba_A.distanceToGo() != 0) 
@@ -232,16 +233,17 @@ void voltar_posicao_inicial(char bomba)
             bomba_A.run();
         }
 
-        bomba_A.setMaxSpeed(1000);                  // Velocidade máxima (passos/segundo)
-        bomba_A.setAcceleration(500);               // Aceleração (passos/segundo²)
-    } 
-    else if (bomba == 'B')
+        bomba_A.setMaxSpeed(1000);
+        bomba_A.setAcceleration(500);
+    } else
+    if (bomba == 'B')
     {
-        bomba_B.setMaxSpeed(200);         // define a velocidade maxima para 200 passos/segundo
-        bomba_B.setAcceleration(0);       // atinge 200pps instantaneamente
-        bomba_B.stop();                   // para o motor
-        bomba_B.moveTo(0);                // define o alvo de posição como 0
-        bomba_B.run();                    // atualiza o motor para alcançar a posicao 0
+        bomba_B.setMaxSpeed(200);
+        bomba_B.setAcceleration(0);
+        bomba_B_acionada = 0x00;
+        bomba_B.stop();        // para o motor
+        bomba_B.moveTo(0);     // move para a posicao 0
+        bomba_B.run();         // atualiza o motor para alcançar a posicao 0
 
         // aguarda ate que o motor alcance a posicao 0
         while (bomba_B.distanceToGo() != 0) 
@@ -249,7 +251,7 @@ void voltar_posicao_inicial(char bomba)
             bomba_B.run();
         }
 
-        bomba_B.setMaxSpeed(1000);                  // Velocidade máxima (passos/segundo)
-        bomba_B.setAcceleration(500);               // Aceleração (passos/segundo²)
+        bomba_B.setMaxSpeed(1000);
+        bomba_B.setAcceleration(500);
     }
 }
