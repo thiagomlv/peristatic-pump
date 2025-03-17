@@ -133,7 +133,7 @@ Exibicao do menu inicial (Selecao da bomba A ou B)
 
 void menuSelecionarBomba() // menu 1
 {
-    lerTeclado(0x00, 0x01, 0x01, 0x01, 0x00);           // Le qual botao foi apertado
+    lerTeclado(0x00, 0x01, 0x01, 0x00, 0x01);           // Le qual botao foi apertado
 
     // --- Avalia em qual posicao a seta de selecao deve ser exibida ---
     if (pos_seta_selecao == 1)
@@ -160,9 +160,9 @@ void menuSelecionarBomba() // menu 1
         atualizarPosicaoSetaDown(2);                       // a posicao da seta de selecao 
     } //end if down
     
-    if(left == 0x01)                                     // tecla select pressionada?
+    if(select == 0x01)                                     // tecla select pressionada?
     {                                                      // sim...
-        left = 0x00;                                     // limpa flag da tecla
+        select = 0x00;                                     // limpa flag da tecla
 
         // Define a bomba que foi selecionada pelo usuario
         if      (pos_seta_selecao == 1) bomba_selecionada = 'A';
@@ -182,7 +182,7 @@ Exibicao do menu inicial da bomba selecionada
 
 void menuSelecionarOpcoesIniciais()  // menu 2
 {
-    lerTeclado(0x00, 0x01, 0x01, 0x01, 0x00);              // Le qual botao foi apertado
+    lerTeclado(0x00, 0x01, 0x01, 0x00, 0x01);           // Le qual botao foi apertado
 
     // --- Avalia em qual posicao a seta de selecao deve ser exibida ---
     if (pos_seta_selecao == 1 && (pos_seta_selecao_anterior == 1 || pos_seta_selecao_anterior == 2))
@@ -250,9 +250,9 @@ void menuSelecionarOpcoesIniciais()  // menu 2
     
     } //end if down
     
-    if(left == 0x01)                                       // tecla select pressionada?
+    if(select == 0x01)                                       // tecla select pressionada?
     {                                                      // sim...
-        left = 0x00;                                       // limpa flag da tecla
+        select = 0x00;                                       // limpa flag da tecla
 
         // atualiza a variavel que muda o menu no proximo loop
         if      (pos_seta_selecao == 1) menu = 3;         // iniciar
@@ -297,7 +297,7 @@ Selecionar fluxo conforme a unidade
 
 void menuSelecionarFluxo() // menu 3
 {
-    lerTeclado(0x00, 0x01, 0x01, 0x01, 0x00);                   // Le qual botao foi apertado
+    lerTeclado(0x00, 0x01, 0x01, 0x00, 0x01);           // Le qual botao foi apertado
 
     // define o valor da unidade da bomba selecionada
     if      (bomba_selecionada == 'A') unidade = unidade_A;
@@ -363,9 +363,9 @@ void menuSelecionarFluxo() // menu 3
         atualizarAlgarismoDown(9);                         // atualiza o algarismo
     } //end if down
     
-    if(left == 0x01)                                      // tecla select pressionada?
+    if(select == 0x01)                                      // tecla select pressionada?
     {                                                       // sim...
-        left = 0x00;                                      // limpa flag da tecla
+        select = 0x00;                                      // limpa flag da tecla
 
         if (posicao_algarismo == 0) {
             fluxo_selecionado += String(algarismo);
@@ -416,7 +416,7 @@ Selecionar os parametros ajustaveis
 
 void menuSelecionarAjuste()
 {
-    lerTeclado(0x00, 0x01, 0x01, 0x01, 0x00);           // le qual botao foi apertado
+    lerTeclado(0x00, 0x01, 0x01, 0x00, 0x01);           // Le qual botao foi apertado
 
     // obtem o tamanho da seringa atual
     if      (bomba_selecionada == 'A') seringa_atual = seringa_A;
@@ -447,9 +447,9 @@ void menuSelecionarAjuste()
         atualizarPosicaoSetaDown(2);                       // Atualiza a posicao da seta de selecao 
     } //end if down
     
-    if(left == 0x01)                                     // tecla select pressionada?
+    if(select == 0x01)                                     // tecla select pressionada?
     {                                                      // sim...
-        left = 0x00;                                     // limpa flag da tecla
+        select = 0x00;                                     // limpa flag da tecla
 
         // atualiza a variavel que muda o menu no proximo loop
         menu = pos_seta_selecao + 4;
@@ -467,7 +467,7 @@ Selecionar unidade
 
 void menuSelecionarUnidade() // menu 5
 {
-    lerTeclado(0x00, 0x01, 0x01, 0x01, 0x00);           // le qual botao foi apertado
+    lerTeclado(0x00, 0x01, 0x01, 0x00, 0x01);           // Le qual botao foi apertado
 
     // --- Avalia em qual posicao a seta de selecao deve ser exibida ---
     if (pos_seta_selecao == 1 && (pos_seta_selecao_anterior == 1 || pos_seta_selecao_anterior == 2))
@@ -514,9 +514,9 @@ void menuSelecionarUnidade() // menu 5
         atualizarPosicaoSetaDown(3);                       // Atualiza a posicao da seta de selecao 
     } //end if down
     
-    if(left == 0x01)                                     // tecla select pressionada?
+    if(select == 0x01)                                     // tecla select pressionada?
     {                                                      // sim...
-        left = 0x00;                                     // limpa flag da tecla
+        select = 0x00;                                     // limpa flag da tecla
 
         // atualiza a unidade
         if      (bomba_selecionada == 'A') unidade_A = pos_seta_selecao;
@@ -540,7 +540,7 @@ void menuSelecionarSeringa()  // menu 6
     else if (bomba_selecionada == 'B') unidade_B = 2;           // define a unidade da bomba selecionada para passos/segundo
     calibracao_flag = 0x01;                                     // sinaliza que o menu de selecao de fluxo deve ter unidade 2
     
-    lerTeclado(0x00, 0x01, 0x01, 0x01, 0x00);                   // le qual botao foi apertado
+    lerTeclado(0x00, 0x01, 0x01, 0x00, 0x01);           // Le qual botao foi apertado
 
     // --- avalia em qual algarismo esta sendo selecionado no fluxo ---
     if (posicao_algarismo == 0) 
@@ -577,9 +577,9 @@ void menuSelecionarSeringa()  // menu 6
         atualizarAlgarismoDown(9);                         // Atualiza o algarismo
     } //end if down
     
-    if(left == 0x01)                                      // tecla select pressionada?
+    if(select == 0x01)                                      // tecla select pressionada?
     {                                                       // sim...
-        left = 0x00;                                      // limpa flag da tecla
+        select = 0x00;                                      // limpa flag da tecla
 
         if (posicao_algarismo == 0) {
             seringa_selecionada += String(algarismo);
@@ -620,7 +620,7 @@ Selecionar por quantos minutos a calibracao vai ocorrer
 
 void menuSelecionarMinutosCalibracao() // menu 7
 {
-    lerTeclado(0x00, 0x01, 0x01, 0x01, 0x00);                   // le qual botao foi apertado
+    lerTeclado(0x00, 0x01, 0x01, 0x00, 0x01);           // Le qual botao foi apertado
 
     // --- avalia em qual algarismo esta sendo selecionado no fluxo ---
     if (posicao_algarismo == 0) 
@@ -652,9 +652,9 @@ void menuSelecionarMinutosCalibracao() // menu 7
         atualizarAlgarismoDown(9);                         // Atualiza o algarismo
     } //end if down
     
-    if(left == 0x01)                                      // tecla select pressionada?
+    if(select == 0x01)                                      // tecla select pressionada?
     {                                                       // sim...
-        left = 0x00;                                      // limpa flag da tecla
+        select = 0x00;                                      // limpa flag da tecla
 
         if (posicao_algarismo == 0) {
             minutos_calibracao += String(algarismo);
@@ -719,7 +719,7 @@ Selecionar calibracao observada
 
 void menuSelecionarCalibracao()  // menu 9
 {
-    lerTeclado(0x00, 0x01, 0x01, 0x01, 0x00);                   // Le qual botao foi apertado
+    lerTeclado(0x00, 0x01, 0x01, 0x00, 0x01);           // Le qual botao foi apertado
 
     // --- avalia em qual algarismo esta sendo selecionado no fluxo ---
     if (posicao_algarismo == 0) 
@@ -756,9 +756,9 @@ void menuSelecionarCalibracao()  // menu 9
         atualizarAlgarismoDown(9);                         // atualiza o algarismo
     } //end if down
     
-    if(left == 0x01)                                      // tecla select pressionada?
+    if(select == 0x01)                                      // tecla select pressionada?
     {                                                       // sim...
-        left = 0x00;                                      // limpa flag da tecla
+        select = 0x00;                                      // limpa flag da tecla
         calibracao_flag = 0x00;                             // limpa flag de calibracao
 
         if (posicao_algarismo == 0) {

@@ -22,10 +22,12 @@
 
 
 // --- Mapeamento de Logica ---
+boolean bomba_A_acionada = 0x00,
+        bomba_B_acionada = 0x00;
+
 String mensagem,                                       // armazena a mensagem recebida pela interface serial1
        mensagem_A,                                     // armazena a parte da mensagem para a bomba A
-       mensagem_B,                                     // armazena a parte da mensagem para a bomba B
-       fluxo;
+       mensagem_B;                                     // armazena a parte da mensagem para a bomba B
 
 int indice_separador;                                  // armazena o indice do separador "|" na mensagem recebida 
 
@@ -97,6 +99,18 @@ void loop()
             if (mensagem_B.length() == TAMANHO_MENSAGEM_POR_BOMBA) processarParametros(mensagem_B, "B");;
         }
     }
+
+    if (bomba_A_acionada)
+    {
+        bomba_A.setSpeed(fluxo_A);
+        bomba_A.runSpeed();
+    }
+
+    if (bomba_B_acionada)
+    {
+        bomba_B.setSpeed(fluxo_B);
+        bomba_B.runSpeed();
+    }
 }
 
 /*
@@ -110,16 +124,16 @@ Extrair parametros: fluxo, unidade e seringa
 * @param menssagem: mensagem apenas da bomba selecionada (ex.: A0000-0-000)
 * @param bomba: bomba selecionada
 */
-void processarParametros(String fluxo, char bomba)
+void processarParametros(String mensagem, char bomba)
 {   
     if (bomba == 'A')
     {
-        if (fluxo != "XXXX")                                   // o fluxo eh o codigo de reiniciar "XXXX"?
+        if (mensagem != "XXXX")                                // o fluxo eh o codigo de reiniciar "XXXX"?
         {                                                      // nao...
-            fluxo_float = fluxo.toFloat();                       // converte o fluxo para inteiro
-            if (fluxo_A != fluxo_int)                          // verifica se o fluxo recebido eh igual ao que ja estava
+            fluxo_float = mensagem.toFloat();                  // converte o fluxo para inteiro
+            if (fluxo_A != fluxo_float)                        // verifica se o fluxo recebido eh igual ao que ja estava
             {                                                  // nao...
-                fluxo_A = fluxo_int;                           // atualiza o fluxo da bomba com o novo fluxo (localmente)
+                fluxo_A = fluxo_float;                         // atualiza o fluxo da bomba com o novo fluxo (localmente)
             }
 
             if (fluxo_A == 0) parar_bomba('A');                // para a bomba
@@ -134,12 +148,12 @@ void processarParametros(String fluxo, char bomba)
 
     if (bomba == 'B')
     {
-        if (fluxo != "XXXX")                                   // o fluxo eh o codigo de reiniciar "XXXX"?
+        if (mensagem != "XXXX")                                // o fluxo eh o codigo de reiniciar "XXXX"?
         {                                                      // nao...
-            fluxo_int = fluxo.toInt();                         // converte o fluxo para inteiro
-            if (fluxo_B != fluxo_int)                          // verifica se o fluxo recebido eh igual ao que ja estava
+            fluxo_float = mensagem.toInt();                    // converte o fluxo para inteiro
+            if (fluxo_B != fluxo_float)                        // verifica se o fluxo recebido eh igual ao que ja estava
             {                                                  // nao...
-                fluxo_B = fluxo_int;                           // atualiza o fluxo da bomba com o novo fluxo (localmente)
+                fluxo_B = fluxo_float;                         // atualiza o fluxo da bomba com o novo fluxo (localmente)
             }
 
             if (fluxo_B == 0) parar_bomba('B');                // para a bomba
@@ -163,11 +177,13 @@ void acionar_bomba(char bomba)
 {
     if (bomba == 'A')
     {
+        bomba_A_acionada = 0x01;
         bomba_A.setSpeed(fluxo_A);                       // define a velocidade deseja em passos/segundo
         bomba_A.runSpeed();                              // aciona essa velocidade, sem considerar aceleracao suave
     } else
     if (bomba == 'B')
     {
+        bomba_B_acionada = 0x01;
         bomba_B.setSpeed(fluxo_B);                       // define a velocidade deseja em passos/segundo
         bomba_B.runSpeed();                              // aciona essa velocidade, sem considerar aceleracao suave
     }
@@ -181,8 +197,16 @@ Para o movimento da bomba
 
 void parar_bomba(char bomba)
 {
-    if (bomba == 'A') bomba_A.stop();                    // para o movimento da bomba A
-    if (bomba == 'B') bomba_B.stop();                    // para o movimento da bomba B
+    if (bomba == 'A')
+    {
+        bomba_A_acionada = 0x00;
+        bomba_A.stop();                           // para o movimento da bomba A
+    } else
+    if (bomba == 'B')
+    {
+        bomba_B_acionada = 0x00;
+        bomba_B.stop();                           // para o movimento da bomba B
+    }
 }
 
 /*
@@ -198,9 +222,8 @@ void voltar_posicao_inicial(char bomba)
 
         bomba_A.setMaxSpeed(200);         // define a velocidade maxima para 200 passos/segundo
         bomba_A.setAcceleration(0);       // atinge 200pps instantaneamente
-        bomba_A.moveTo(0);                // define o alvo de posição como 0
         bomba_A.stop();                   // para o motor
-        bomba_A.moveTo(0);                // move para a posicao 0
+        bomba_A.moveTo(0);                // define o alvo de posição como 0
         bomba_A.run();                    // atualiza o motor para alcançar a posicao 0
 
         // aguarda ate que o motor alcance a posicao 0
@@ -216,9 +239,8 @@ void voltar_posicao_inicial(char bomba)
     {
         bomba_B.setMaxSpeed(200);         // define a velocidade maxima para 200 passos/segundo
         bomba_B.setAcceleration(0);       // atinge 200pps instantaneamente
-        bomba_B.moveTo(0);                // define o alvo de posição como 0
         bomba_B.stop();                   // para o motor
-        bomba_B.moveTo(0);                // move para a posicao 0
+        bomba_B.moveTo(0);                // define o alvo de posição como 0
         bomba_B.run();                    // atualiza o motor para alcançar a posicao 0
 
         // aguarda ate que o motor alcance a posicao 0
