@@ -142,8 +142,8 @@ void processarParametros(String mensagem, char bomba)
         }
         else
         {
-            fluxo_A = 0;                                       // define o fluxo atual como zero
-            voltar_posicao_inicial('A');                       // volta a bomba para a posicao inicial
+            fluxo_A = -200.00;                                       // define o fluxo atual como zero
+            acionar_bomba('A');                       // volta a bomba para a posicao inicial
         }
     }
 
@@ -162,8 +162,8 @@ void processarParametros(String mensagem, char bomba)
         }
         else
         {
-            fluxo_B = 0;                                       // define o fluxo atual como zero
-            voltar_posicao_inicial('B');                     // volta a bomba para a posicao inicial
+            fluxo_B = -200;                                       // define o fluxo atual como zero
+            acionar_bomba('B');                     // volta a bomba para a posicao inicial
         }
     }
 }
@@ -207,51 +207,5 @@ void parar_bomba(char bomba)
     {
         bomba_B_acionada = 0x00;
         bomba_B.stop();                           // para o movimento da bomba B
-    }
-}
-
-/*
-##################################################################################################
-Volta a bomba a posicao inicial
-##################################################################################################
-*/
-
-void voltar_posicao_inicial(char bomba)
-{
-    if (bomba == 'A')
-    {
-        bomba_A_acionada = 0x00;
-        bomba_A.setMaxSpeed(200);
-        bomba_A.setAcceleration(0);
-        bomba_A.stop();        // para o motor
-        bomba_A.moveTo(0);     // move para a posicao 0
-        bomba_A.run();         // atualiza o motor para alcançar a posicao 0
-
-        // aguarda ate que o motor alcance a posicao 0
-        while (bomba_A.distanceToGo() != 0) 
-        {
-            bomba_A.run();
-        }
-
-        bomba_A.setMaxSpeed(1000);
-        bomba_A.setAcceleration(500);
-    } else
-    if (bomba == 'B')
-    {
-        bomba_B.setMaxSpeed(200);
-        bomba_B.setAcceleration(0);
-        bomba_B_acionada = 0x00;
-        bomba_B.stop();        // para o motor
-        bomba_B.moveTo(0);     // move para a posicao 0
-        bomba_B.run();         // atualiza o motor para alcançar a posicao 0
-
-        // aguarda ate que o motor alcance a posicao 0
-        while (bomba_B.distanceToGo() != 0) 
-        {
-            bomba_B.run();
-        }
-
-        bomba_B.setMaxSpeed(1000);
-        bomba_B.setAcceleration(500);
     }
 }

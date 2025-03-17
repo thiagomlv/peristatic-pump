@@ -275,6 +275,8 @@ void menuSelecionarOpcoesIniciais()  // menu 2
 
             enviarFluxo();                                  // envia o fluxo para o arduino que controla as bombas
 
+            pos_seta_selecao = 2;                              // reinicia a seta de selecao na primeira posicao
+            pos_seta_selecao_anterior = 3;                     // reinicia a posicao anterior para a posicao inicial
             fluxo_selecionado = "";                         // reinicia o fluxo selecionado para 0
             menu = 2;                                       // atualiza a variavel que muda o menu no proximo loop
         }
